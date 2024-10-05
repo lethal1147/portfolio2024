@@ -18,8 +18,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   BatteryFull,
-  ClockArrowUp,
-  Lock,
   LockKeyhole,
   Moon,
   Power,
@@ -32,36 +30,42 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import UserAvatar from "@/components/common/userAvatar";
+// import { useDispatch, useSelector } from "react-redux";
 
 const currentDate = dayjs().format("dddd, MMMM D");
 const currentTime = dayjs().format("HH:MM");
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  // const account = useSelector((state) => state.account.value);
+  // const dispatch = useDispatch();
 
   useEffect(() => {
-    // const handleEvent = () => {
-    //   setIsVisible(true);
-    // };
-
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsVisible(false);
       }
     };
-    // window.addEventListener("keydown", handleEvent);
-    // window.addEventListener("click", handleEvent);
     window.addEventListener("keydown", handleEscape);
-
+    setIsClient(true);
     return () => {
-      // window.removeEventListener("keydown", handleEvent);
-      // window.removeEventListener("click", handleEvent);
       window.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
   return (
-    <div className="w-screen h-screen relative overflow-hidden">
+    <div
+      data-testid="lock-screen-page"
+      className="w-screen h-screen relative overflow-hidden"
+    >
       <div
         onClick={() => setIsVisible(true)}
         className="absolute inset-0 bg-lock-screen bg-center bg-cover bg-fixed brightness-50 z-10"
@@ -80,16 +84,38 @@ export default function Home() {
       </div>
 
       <div
+        data-testid="sign-in-form"
         className={cn(
           "absolute inset-0 transition-all ease-out delay-5000 duration-500 translate-y-full size-full flex justify-center z-30 items-center text-white backdrop-blur-md bg-gray-50 bg-opacity-20",
           {
-            "translate-y-0 ": isVisible,
+            "translate-y-0 opacity-100": isVisible,
+            "opacity-0": !isVisible,
           }
         )}
       >
         <Card className="bg-transparent text-white border-none shadow-none">
           <CardHeader>
-            <Avatar className="size-48">
+            <UserAvatar />
+          </CardHeader>
+          <CardContent className="flex flex-col gap-5">
+            <CardTitle className="text-center text-xl">
+              Joakim Dahlstrom
+            </CardTitle>
+            <CardDescription>
+              <Input
+                className="border-gray-500 transition-all duration-75 focus:border-b-2 focus:border-b-blue-500 bg-black/40 placeholder:text-gray-400"
+                placeholder="PIN"
+              />
+            </CardDescription>
+            <CardFooter className="flex justify-center">
+              <Button type="button">Sign-In</Button>
+            </CardFooter>
+          </CardContent>
+        </Card>
+
+        <div className="flex absolute bottom-10 left-10 w-64 z-50 text-white justify-between">
+          <div className="flex gap-3 w-full items-center">
+            <Avatar>
               <AvatarImage
                 src="/asset/image/joakimDahlstrom.webp"
                 alt="Joakim Dahlstrom"
@@ -103,72 +129,80 @@ export default function Home() {
                 />
               </AvatarFallback>
             </Avatar>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-5">
-            <CardTitle className="text-center text-xl">
-              JOAKIM DAHLSTROM
-            </CardTitle>
-            <CardDescription>
-              <Input
-                className="border-gray-500 transition-all duration-75 focus:border-b-2 focus:border-b-blue-500 bg-black/40 placeholder:text-gray-400"
-                placeholder="PIN"
-              />
-            </CardDescription>
-            <CardFooter className="flex justify-center">
-              <Button>Sign-In</Button>
-            </CardFooter>
-          </CardContent>
-        </Card>
+            <p>Joakim Dahlstrom</p>
+          </div>
+        </div>
       </div>
 
-      <div className="flex absolute bottom-10 right-10 w-52 z-50 text-white justify-between">
-        <Button
-          className=" p-3 duration-75 bg-transparent hover:border shadow-none hover:bg-white/20 transition-all"
-          type="button"
-        >
-          <Wifi />
-        </Button>
-        <Button
-          className=" p-3 duration-75 bg-transparent hover:border shadow-none hover:bg-white/20 transition-all"
-          type="button"
-        >
-          <ClockArrowUp />
-        </Button>
-        <Button
-          className=" p-3 duration-75 bg-transparent hover:border shadow-none hover:bg-white/20 transition-all"
-          type="button"
-        >
-          <BatteryFull />
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              className=" p-3 duration-75 bg-transparent hover:border shadow-none hover:bg-white/20 transition-all"
-              type="button"
-            >
-              <Power />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="rounded-sm bg-neutral-900/90 w-20 text-white border-black">
-            <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
-              <LockKeyhole size={20} />
-              <p className="col-span-2 text-xs">Lock</p>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
-              <Moon size={20} />
-              <p className="col-span-2 text-xs">Sleep</p>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
-              <Power size={20} />
-              <p className="col-span-2 text-xs">Shut down</p>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
-              <RotateCcw size={20} />
-              <p className="col-span-2 text-xs">Restart</p>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      {isClient ? (
+        <div className="flex absolute bottom-10 right-10 w-44 z-50 text-white justify-between">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  className=" p-3 duration-75 bg-transparent shadow-none hover:bg-white/20 transition-all"
+                  type="button"
+                >
+                  <Wifi />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Wifi</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  className=" p-3 duration-75 bg-transparent shadow-none hover:bg-white/20 transition-all"
+                  type="button"
+                >
+                  <BatteryFull />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Battery 100%</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className=" p-3 duration-75 bg-transparent shadow-none hover:bg-white/20 transition-all"
+                      type="button"
+                    >
+                      <Power />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <TooltipContent>
+                    <p>Power</p>
+                  </TooltipContent>
+                  <DropdownMenuContent className="rounded-sm bg-neutral-900/90 w-20 text-white border-black">
+                    <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
+                      <LockKeyhole size={20} />
+                      <p className="col-span-2 text-xs">Lock</p>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
+                      <Moon size={20} />
+                      <p className="col-span-2 text-xs">Sleep</p>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
+                      <Power size={20} />
+                      <p className="col-span-2 text-xs">Shut down</p>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="grid grid-cols-3 gap-3 font-bold py-1 focus:bg-neutral-500/50 focus:text-white">
+                      <RotateCcw size={20} />
+                      <p className="col-span-2 text-xs">Restart</p>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TooltipTrigger>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      ) : (
+        <p>Loading</p>
+      )}
     </div>
   );
 }
