@@ -13,4 +13,19 @@ describe("lock-screen", () => {
 
     await waitFor(() => expect(signinForm).toBeInTheDocument());
   });
+
+  it("hide sign-in form when press esc", async () => {
+    render(<Home />);
+
+    fireEvent.click(screen.getByTestId("lock-screen-page"));
+    const signinForm = screen.getByTestId("sign-in-form");
+    await waitFor(() => {
+      expect(signinForm).toBeVisible();
+    });
+
+    fireEvent.keyDown(window, { key: "Escape" });
+    await waitFor(() => {
+      expect(signinForm).toHaveClass("opacity-0");
+    });
+  });
 });
