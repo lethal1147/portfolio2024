@@ -1,17 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { Account } from "@/types/account";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const accountSlice = createSlice({
   name: "account",
   initialState: {
-    account: {
-      firstname: "Joakim",
-      lastname: "Dahlstrom",
+    currentAccount: {
+      accountName: "Joakim Dahlstrom",
       imgPath: "/asset/image/joakimDahlstrom.webp",
     },
+    accountsList: [
+      {
+        accountName: "Joakim Dahlstrom",
+        imgPath: "/asset/image/joakimDahlstrom.webp",
+      },
+      {
+        accountName: "YhumYhum",
+        imgPath: "/asset/image/yhumyhum.webp",
+      },
+      {
+        accountName: "Nieowmoon",
+        imgPath: "/asset/image/nieowmoon.webp",
+      },
+    ],
   },
   reducers: {
-    changeAccount: (state, action) => {
-      state.account = action.payload;
+    changeAccount: (state, action: PayloadAction<Account>) => {
+      state.currentAccount = action.payload;
     },
   },
 });

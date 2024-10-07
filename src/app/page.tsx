@@ -37,7 +37,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import UserAvatar from "@/components/common/userAvatar";
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "./store";
+import { changeAccount } from "./features/account/accountSlice";
+import { Account } from "@/types/account";
+import useStatus from "@/hooks/useStatus";
+import { API_STATUS } from "./constant/status";
+import Loader from "@/components/common/loader";
 
 const currentDate = dayjs().format("dddd, MMMM D");
 const currentTime = dayjs().format("HH:MM");
@@ -45,8 +51,13 @@ const currentTime = dayjs().format("HH:MM");
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  // const account = useSelector((state) => state.account.value);
-  // const dispatch = useDispatch();
+  const { isPending, setStatus } = useStatus();
+  const account = useSelector((state: RootState) => state.account);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleChangeAccount = (acc: Account) => {
+    dispatch(changeAccount(acc));
+  };
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -94,43 +105,67 @@ export default function Home() {
         )}
       >
         <Card className="bg-transparent text-white border-none shadow-none">
-          <CardHeader>
-            <UserAvatar />
+          <CardHeader className="flex items-center">
+            <UserAvatar account={account.currentAccount} />
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
             <CardTitle className="text-center text-xl">
-              Joakim Dahlstrom
+              {account.currentAccount.accountName}
             </CardTitle>
-            <CardDescription>
-              <Input
-                className="border-gray-500 transition-all duration-75 focus:border-b-2 focus:border-b-blue-500 bg-black/40 placeholder:text-gray-400"
-                placeholder="PIN"
-              />
-            </CardDescription>
             <CardFooter className="flex justify-center">
-              <Button type="button">Sign-In</Button>
+              {isPending ? (
+                <div className="flex gap-3 items-center">
+                  <div className="size-3">
+                    <Loader size={5} />
+                  </div>
+                  <p>Welcome</p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  <Input
+                    className="border-gray-500 transition-all duration-75 focus:border-b-2 focus:border-b-blue-500 bg-black/40 placeholder:text-gray-400"
+                    placeholder="PIN"
+                  />
+                  <Button
+                    onClick={() => setStatus(API_STATUS.PENDING)}
+                    type="button"
+                  >
+                    Sign-In
+                  </Button>
+                </div>
+              )}
             </CardFooter>
           </CardContent>
         </Card>
 
-        <div className="flex absolute bottom-10 left-10 w-64 z-50 text-white justify-between">
-          <div className="flex gap-3 w-full items-center">
-            <Avatar>
-              <AvatarImage
-                src="/asset/image/joakimDahlstrom.webp"
-                alt="Joakim Dahlstrom"
-              />
-              <AvatarFallback>
-                <Image
-                  width="250"
-                  height="250"
-                  alt="User-icon"
-                  src={userLogo}
-                />
-              </AvatarFallback>
-            </Avatar>
-            <p>Joakim Dahlstrom</p>
-          </div>
+        <div className="flex flex-col gap-1 absolute bottom-10 left-10 w-52 z-50 text-white justify-between">
+          {account.accountsList.map((acc) => (
+            <div
+              role="button"
+              onClick={() => handleChangeAccount(acc)}
+              key={acc.accountName}
+              className={cn(
+                "flex gap-3 w-full p-1 rounded-sm items-center hover:bg-gray-300/20 transition-all cursor-pointer",
+                {
+                  "bg-gray-300/20":
+                    acc.accountName === account.currentAccount.accountName,
+                }
+              )}
+            >
+              <Avatar>
+                <AvatarImage src={acc.imgPath} alt={acc.accountName} />
+                <AvatarFallback>
+                  <Image
+                    width="250"
+                    height="250"
+                    alt="User-icon"
+                    src={userLogo}
+                  />
+                </AvatarFallback>
+              </Avatar>
+              <p>{acc.accountName}</p>
+            </div>
+          ))}
         </div>
       </div>
 

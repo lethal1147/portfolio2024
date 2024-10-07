@@ -1,0 +1,23 @@
+.spinner {
+  --spinner-size: 11.2px; /* Default size */
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border-radius: 50%; /* Always a perfect circle */
+  box-shadow: calc(var(--spinner-size) * 2.5) 0px 0 0 rgba(255, 255, 255, 0.2),
+    calc(var(--spinner-size) * 2.025) calc(var(--spinner-size) * 1.475) 0 0
+      rgba(255, 255, 255, 0.4),
+    calc(var(--spinner-size) * 0.775) calc(var(--spinner-size) * 2.375) 0 0
+      rgba(255, 255, 255, 0.6),
+    calc(var(--spinner-size) * -0.775) calc(var(--spinner-size) * 2.375) 0 0
+      rgba(255, 255, 255, 0.8),
+    calc(var(--spinner-size) * -2.025) calc(var(--spinner-size) * 1.475) 0 0
+      rgb(255, 255, 255);
+  animation: spinner-b87k6z 1s infinite linear;
+}
+
+@keyframes spinner-b87k6z {
+  to {
+    transform: rotate(360deg);
+  }
+}
