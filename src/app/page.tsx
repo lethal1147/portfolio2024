@@ -43,19 +43,28 @@ import { Account } from "@/types/account";
 import useStatus from "@/hooks/useStatus";
 import { API_STATUS } from "./constant/status";
 import Loader from "@/components/common/loader";
-
-const currentDate = dayjs().format("dddd, MMMM D");
-const currentTime = dayjs().format("HH:MM");
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [currentDate, setCurrentDate] = useState(
+    dayjs().format("dddd, MMMM D")
+  );
+  const [currentTime, setCurrentTime] = useState(dayjs().format("HH:mm"));
   const { isPending, setStatus } = useStatus();
+  const router = useRouter();
   const account = useSelector((state: RootState) => state.account);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleChangeAccount = (acc: Account) => {
     dispatch(changeAccount(acc));
+  };
+
+  const onSignin = async () => {
+    setTimeout(() => {
+      router.push("/desktop");
+    }, 2000);
   };
 
   useEffect(() => {
@@ -69,6 +78,15 @@ export default function Home() {
     return () => {
       window.removeEventListener("keydown", handleEscape);
     };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(dayjs().format("HH:mm"));
+      setCurrentDate(dayjs().format("dddd, MMMM D"));
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -126,7 +144,10 @@ export default function Home() {
                     placeholder="PIN"
                   />
                   <Button
-                    onClick={() => setStatus(API_STATUS.PENDING)}
+                    onClick={() => {
+                      setStatus(API_STATUS.PENDING);
+                      onSignin();
+                    }}
                     type="button"
                   >
                     Sign-In

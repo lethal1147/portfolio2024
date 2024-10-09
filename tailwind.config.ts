@@ -53,6 +53,7 @@ const config: Config = {
       },
       backgroundImage: {
         "lock-screen": "url('/asset/image/lock-screen.webp')",
+        "wall-paper": "url('/asset/image/desktop-wallpaper.webp')",
       },
       borderRadius: {
         lg: "var(--radius)",
