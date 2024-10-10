@@ -4,10 +4,11 @@ import "./taskbar.css";
 import { MicrosoftEdgeIcon } from "@/components/icons";
 import TaskMenuItem from "./taskMenuItem";
 import Image from "next/image";
+import ActionBar from "./actionBar";
 
 export default function Taskbar() {
   return (
-    <nav className="grid grid-cols-3 py-1 backdrop-blur-md w-full h-14 bg-gray-800/80 border-t border-gray-600">
+    <nav className="grid grid-cols-3 py-1 px-5 backdrop-blur-md w-full h-14 bg-gray-800/80 border-t border-gray-600">
       <div className="col-span-1" />
       <ul className="flex m-auto col-span-1 gap-2">
         <TaskMenuItem>
@@ -57,8 +58,18 @@ export default function Taskbar() {
             alt="google chrom icon"
           />
         </TaskMenuItem>
+        <TaskMenuItem>
+          <Image
+            height={28}
+            width={28}
+            src="/asset/image/steam-icon.png"
+            alt="visaul studio code icon"
+          />
+        </TaskMenuItem>
       </ul>
-      <div className="col-span-1"></div>
+      <div className="col-span-1 flex justify-end items-center">
+        <ActionBar />
+      </div>
     </nav>
   );
 }
