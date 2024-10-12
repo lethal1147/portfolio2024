@@ -1,15 +1,39 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { createPortal } from "react-dom";
+import { DesktopAppType } from "../types";
+import HobbiesFolder from "@/components/windowsApp/hoobiesFolder";
 
 type DesktopIconProps = {
-  name: string;
-  children: React.ReactNode;
+  app: DesktopAppType;
 };
 
-export default function DesktopIcon({ name, children }: DesktopIconProps) {
+export default function DesktopIcon({ app }: DesktopIconProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleDoubleClick = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseWindow = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div className="rounded-sm transition flex flex-col justify-center items-center p-1.5 size-24 hover:bg-white/10 hover:backdrop-blur-md">
-      {children}
-      <p className="text-sm text-white text-center">{name}</p>
-    </div>
+    <>
+      <div
+        onDoubleClick={() => handleDoubleClick()}
+        className="rounded-sm flex flex-col justify-center items-center p-1.5 size-24 hover:bg-gray-200/20 hover:backdrop-blur-md transition-all"
+      >
+        {app.children}
+        <p className="text-sm text-white text-center">{app.name}</p>
+      </div>
+      {isOpen &&
+        createPortal(
+          <HobbiesFolder onClose={handleCloseWindow} />,
+          document.getElementById("desktop") as HTMLElement
+        )}
+    </>
   );
 }

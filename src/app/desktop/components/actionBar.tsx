@@ -15,7 +15,7 @@ export default function ActionBar() {
   return (
     <div className="flex items-center gap-2">
       <Popover>
-        <PopoverTrigger className="text-xs flex p-2 transition-all hover:bg-white/10 hover:backdrop-blur-md rounded-sm text-gray-100">
+        <PopoverTrigger className="text-xs flex p-2 hover:bg-gray-200/20 hover:backdrop-blur-md transition-all rounded-sm text-gray-100">
           <p>{currentLanguage}</p>
         </PopoverTrigger>
         <PopoverContent className="p-3 text-sm flex flex-col gap-1.5 bg-zinc-700 border-gray-900 text-gray-100">
@@ -25,7 +25,7 @@ export default function ActionBar() {
               key={lang.id}
               onClick={() => setCurrentLanguage(lang.id)}
               className={cn(
-                "flex gap-3 p-3 rounded-md relative hover:backdrop-blur-md hover:bg-white/10",
+                "flex gap-3 p-3 rounded-md relative hover:bg-gray-200/20 hover:backdrop-blur-md transition-all",
                 {
                   "backdrop-blur-md bg-white/10": currentLanguage === lang.id,
                 }
