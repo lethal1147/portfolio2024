@@ -7,7 +7,7 @@ export default function Desktop() {
   return (
     <main
       id="desktop"
-      className="min-w-screen min-h-screen max-w-screen max-h-screen relative bg-wall-paper bg-center bg-cover bg-fixed"
+      className="min-w-screen min-h-screen max-w-screen overflow-hidden max-h-screen relative bg-wall-paper bg-center bg-cover bg-fixed"
     >
       <div className="grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,minmax(100px,1fr))] gap-4 rounded-lg h-[calc(100vh-60px)] overflow-hidden">
         {DESKTOP_APPS.map((app) => (

@@ -7,7 +7,7 @@ export default function DefaultWindowMenu() {
   return (
     <div className="flex bg-zinc-800 w-full px-3 py-1.5 gap-5">
       <Button
-        className="bg-transparent p-3 hover:bg-gray-200/20 hover:backdrop-blur-md transition-all hover:backdrop-blur-md hover:bg-gray-100/10 shadow-none"
+        className="bg-transparent p-3 transition-all hover:backdrop-blur-md hover:bg-gray-100/10 shadow-none"
         type="button"
         disabled
       >

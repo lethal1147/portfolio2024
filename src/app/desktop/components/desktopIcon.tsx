@@ -31,7 +31,14 @@ export default function DesktopIcon({ app }: DesktopIconProps) {
       </div>
       {isOpen &&
         createPortal(
-          <HobbiesFolder onClose={handleCloseWindow} />,
+          <div
+            className="fixed inset-0 top-0 flex items-center justify-center z-50"
+            id="window-overlay"
+          >
+            <div className="relative">
+              <HobbiesFolder onClose={handleCloseWindow} />
+            </div>
+          </div>,
           document.getElementById("desktop") as HTMLElement
         )}
     </>
